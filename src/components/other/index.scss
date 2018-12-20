@@ -1,0 +1,7 @@
+.test{
+  background-color: #ccc;
+  &.active{
+    background-color: #ddd;
+    transform: translate(10, 10);
+  }
+}
