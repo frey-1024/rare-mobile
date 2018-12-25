@@ -4,8 +4,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-
-    "outDir": "build/dist",
     "module": "esnext",
     "target": "es6",
     "lib": [

@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const { getProjectPath } = require('./utils');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const chalk = require('chalk');
 const pkg = require(getProjectPath('package.json'));
 
 module.exports = (options) => {
@@ -21,17 +20,17 @@ module.exports = (options) => {
       strictExportPresence: true,
       rules: [
         {
-          test: /\.(js|mjs)$/,
+          test: /\.(js|mjs|tsx?|jsx?)$/,
           enforce: 'pre', // 前置(pre), 先loader此部分，进行相应的语法检查
           loader: 'eslint-loader',
-          include: includePaths,
-        },
-        {
-          test: /\.(tsx?|jsx?)$/,
-          enforce: 'pre',
-          loader: 'tslint-loader',
+          options: {
+            formatter: require("eslint-friendly-formatter"),
+            eslintPath: require.resolve('eslint'),
+            failOnWarning: true,
+            failOnError: true,
+          },
           include: includePaths
-        }
+        },
       ]
     },
     // 解析
@@ -75,11 +74,13 @@ module.exports = (options) => {
       }),
       // 为每个打包的文件头部添加 banner（版权和版本信息等）
       new webpack.BannerPlugin(`${pkg.name} v${pkg.version}`),
-      // 打包进度
-      new webpack.ProgressPlugin((percentage, message, ...args) => {
-        // e.g. Output each progress message directly to the console:
-        console.info(percentage, message, ...args);
-      })
     ],
+    node: {
+      dgram: 'empty',
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty',
+      child_process: 'empty',
+    },
   };
 };
