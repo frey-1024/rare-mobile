@@ -4,10 +4,9 @@ const chalk = require('chalk');
 const sass = require('gulp-sass');
 const ts = require('gulp-typescript');
 const replace = require('gulp-replace');
-const rename = require("gulp-rename");
+const rename = require('gulp-rename');
 const clean = require('gulp-clean');
 const cwd = process.cwd();
-
 
 function getProjectPath(...filePath) {
   return path.join(cwd, ...filePath);
@@ -51,7 +50,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('lib'));
 });
 // 最后打包
-gulp.task('build', gulp.series('clean', 'ts', 'ts_index','sass', done => {
+gulp.task('build', gulp.series('clean', 'ts', 'ts_index', 'sass', done => {
   done();
   console.log(chalk.green('Build lib successfully'));
 }));
