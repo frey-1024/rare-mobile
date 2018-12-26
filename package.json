@@ -32,6 +32,7 @@
   "homepage": "https://github.com/zhangKunUserGit/rare-mobile#readme",
   "devDependencies": {
     "@babel/core": "^7.2.2",
+    "@types/node": "^10.12.18",
     "@types/prop-types": "^15.5.8",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
@@ -77,6 +78,7 @@
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
     "progress": "^2.0.3",
+    "raw-loader": "^1.0.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "through2": "^3.0.0",

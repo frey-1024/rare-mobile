@@ -32,6 +32,10 @@ module.exports = merge(baseConfig(), {
             exclude: /node_modules/
           },
           {
+            test: /\.md$/,
+            use: 'raw-loader' // 把文件内容作为字符串返回
+          },
+          {
             test: /\.(bmp|gif|jpe?g|png)$/,
             loader: 'url-loader',
             options: {
