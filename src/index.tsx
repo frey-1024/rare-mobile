@@ -1,2 +1,1 @@
-export { default as Button } from './components/button/index';
-export { default as Other } from './components/other/index';
+export { default as PullToRefreshNormal } from './components/pull-to-refresh-normal/index';

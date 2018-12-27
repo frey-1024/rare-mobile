@@ -1,0 +1,10 @@
+$pull-prefix: rate-pull-refresh;
+
+.#{$pull-prefix}-wrapper{
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  .#{$pull-prefix}-content{
+    overflow: hidden;
+  }
+}

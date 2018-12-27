@@ -23,5 +23,11 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true
-  }
+  },
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules",
+    "lib",
+    "es"
+  ]
 }

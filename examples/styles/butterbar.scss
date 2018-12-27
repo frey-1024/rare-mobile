@@ -1,0 +1,69 @@
+.butterbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-bottom: -3px;
+  height: 3px;
+  width: 100%;
+  z-index: 999;
+  :global{
+    .bar :local{
+       animation: changebar 2.25s infinite;
+    }
+    .bar:before :local{
+      animation: movingbar 0.75s infinite;
+    }
+  }
+  :global {
+    @keyframes movingbar {
+      0% {
+        left: 50%;
+        right: 50%;
+      }
+      99.9% {
+        left: 0;
+        right: 0;
+      }
+      100% {
+        left: 50%;
+        right: 50%;
+      }
+    }
+
+    @keyframes changebar {
+      0% {
+        background-color: #0aa770;
+      }
+      33.3% {
+        background-color: #0aa770;
+      }
+      33.33% {
+        background-color: #ff0000;
+      }
+      66.6% {
+        background-color: #f987d6;
+      }
+      66.66% {
+        background-color: #f987d6;
+      }
+      99.9% {
+        background-color: #00bcd4;
+      }
+    }
+    .bar {
+      position: absolute;
+      height: 0;
+      width: 100%;
+      text-indent: -9999px;
+      background-color: #0aa770;
+      &:before {
+        content: "";
+        height: 3px;
+        position: absolute;
+        left: 50%;
+        right: 50%;
+        background-color: inherit;
+      }
+    }
+  }
+}

@@ -40,6 +40,7 @@ module.exports = (options) => {
       extensions: ['.tsx', '.ts', '.js', '.jsx', '.json'],
       alias: {
         'rate-mobile': getProjectPath('src'),
+        '@': getProjectPath('examples')
       }
     },
     plugins: [

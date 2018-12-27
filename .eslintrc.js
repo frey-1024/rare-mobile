@@ -78,7 +78,7 @@ module.exports = {
     'react/jsx-closing-bracket-location': 1,
     'react/jsx-boolean-value': 1,
     'react/self-closing-comp': 1,
-    'react/jsx-no-bind': 1,
+    'react/jsx-no-bind': 0,
     'jsx-a11y/anchor-has-content': 0,
     'jsx-a11y/href-no-hash': 0,
     'jsx-a11y/no-static-element-interactions': 0,

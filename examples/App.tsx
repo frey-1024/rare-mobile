@@ -1,19 +1,20 @@
 import * as React from 'react';
-import test from './test.md';
-// import {Router, Route} from 'react-router-dom';
-// import SideBar from './components/SideBar';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+// import lazyLoad from '@/components/LazyLoad';
+// import AppRouter from './router/index';
 import './app.scss';
 import '../src/index.scss';
-console.log(test);
+import lazyLoad from "./components/LazyLoad";
 
-export default class App extends React.PureComponent<any> {
-  render() {
-    return (
-      <div className="App height-100">
-        <div>
-          {test}
-        </div>
-      </div>
-    );
-  }
-}
+// const AppRouter = () => <div>11111</div>;
+
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      {/*<Route exact path="/notFound" component={lazyLoad('modules/core/components/NotFound')}/>*/}
+      {/*<Route path="/" component={AppRouter}/>*/}
+      <Route path="/" component={lazyLoad('router/index')}/>
+    </Switch>
+  </BrowserRouter>
+);
+export default App;
