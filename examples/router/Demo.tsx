@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 import DemoProtectRoute from '../components/DemoProtectRoute';
 import { getDemoRouters } from './routerSplit';
-// import '../styles/pcBase.scss';
+import '../styles/demoBase.scss';
 
 const demoRouters = getDemoRouters();
 

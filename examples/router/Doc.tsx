@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 import DocProtectRoute from '../components/DocProtectRoute';
 import { getDocRouters } from './routerSplit';
-// import '../styles/pcBase.scss';
+import '../styles/docBase.scss';
 
 const docRouters = getDocRouters();
 
