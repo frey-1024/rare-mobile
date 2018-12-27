@@ -1,10 +1,10 @@
 import React, {Fragment} from 'react';
 import { Switch, Redirect } from 'react-router-dom';
-import DocProtectRoute from '../components/DocProtectRoute';
-import { getDocRouters } from './routerSplit';
+import DemoProtectRoute from '../components/DemoProtectRoute';
+import { getDemoRouters } from './routerSplit';
 // import '../styles/pcBase.scss';
 
-const docRouters = getDocRouters();
+const demoRouters = getDemoRouters();
 
 interface DocProps extends RouteProps{
 }
@@ -12,17 +12,16 @@ interface DocProps extends RouteProps{
 export default class Doc extends React.Component<DocProps, any>{
   getAvailableRouter() {
     const { match } = this.props;
-    return docRouters.map((route: any) => {
-      return <DocProtectRoute {...this.props} key={route.pathname} exact={!route.notExact} path={`${match.path}${route.pathname}`} component={route.component}/>;
+    return demoRouters.map((route: any) => {
+      return <DemoProtectRoute {...this.props} key={route.pathname} exact={!route.notExact} path={`${match.path}${route.pathname}`} component={route.component}/>;
     });
   }
   render() {
-    console.log(this.props);
     return (
       <Fragment>
         <Switch>
           {this.getAvailableRouter()}
-          <Redirect to="/notFound" />
+          <Redirect to="/demo" />
         </Switch>
       </Fragment>
     );
