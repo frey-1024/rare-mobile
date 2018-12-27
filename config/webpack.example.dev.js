@@ -20,7 +20,8 @@ module.exports = merge(baseConfig(), {
     path: getProjectPath('dist'),
     filename: '[name].bundle.js',
     sourceMapFilename: '[file].map',
-    chunkFilename: '[id].chunk.js'
+    chunkFilename: '[id].chunk.js',
+    publicPath: '/', // 指定资源文件引用的目录
   },
   module: {
     rules: [
