@@ -54,7 +54,7 @@ module.exports = merge(baseConfig(), {
                 loader: 'css-loader',
                 options: {
                   importLoaders: 1,
-                  modules: true,
+                  // modules: true, // 这里因为组件使用的不是css-module， 不想区分examples/src，所以这里也不再使用css-module
                 },
               },
               {

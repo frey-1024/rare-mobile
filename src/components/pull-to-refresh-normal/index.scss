@@ -1,10 +1,23 @@
-$pull-prefix: rate-pull-refresh;
+$namespace: rt-pull-normal;
 
-.#{$pull-prefix}-wrapper{
+.#{$namespace}{
   overflow: auto;
   height: 100%;
   width: 100%;
-  .#{$pull-prefix}-content{
+  .#{$namespace}-content-wrapper{
     overflow: hidden;
+    border: 1px solid #ccc;
+    .#{$namespace}-content{
+      &.#{$namespace}-transitions {
+        transition: all .4s;
+      }
+    }
+    .#{$namespace}-top-text{
+      text-align: center;
+      font-size: 14px;
+      padding: 6px 0;
+      color: #9e9e9e;
+      margin-top: -25px;
+    }
   }
 }

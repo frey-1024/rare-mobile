@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import s from '../styles/butterbar.scss';
+import '../styles/butterbar.scss';
 
 export default class LoadingBar extends Component {
   render() {
     return (
-      <div className={`${s.butterbar}`}>
+      <div className="butter-bar">
         <span className="bar"/>
       </div>
     );
