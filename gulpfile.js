@@ -45,7 +45,9 @@ gulp.task('sass', function () {
   return gulp.src('src/**/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(rename(function (path) {
-      path.dirname = path.dirname.replace('components\\', '\\');
+      path.dirname = path.dirname.replace(/components\\.*/, function (matchPath) {
+        return matchPath.replace('components\\', '\\') + '\\style';
+      });
     }))
     .pipe(gulp.dest('lib'));
 });

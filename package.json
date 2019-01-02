@@ -1,8 +1,8 @@
 {
   "name": "rare-mobile",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.2",
+  "description": "rare-mobile",
+  "main": "lib/index.js",
   "scripts": {
     "dev": "webpack-dev-server --open --inline --progress --config config/webpack.example.dev.js",
     "start": "npm run dev",
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/zhangKunUserGit/rare-mobile.git"
   },
-  "author": "",
+  "author": "zhangkun <1766597067@qq.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/zhangKunUserGit/rare-mobile/issues"
