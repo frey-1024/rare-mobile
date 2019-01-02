@@ -32,6 +32,7 @@
   "homepage": "https://github.com/zhangKunUserGit/rare-mobile#readme",
   "devDependencies": {
     "@babel/core": "^7.2.2",
+    "@types/classnames": "^2.2.6",
     "@types/node": "^10.12.18",
     "@types/prop-types": "^15.5.8",
     "@types/react": "^16.7.17",
