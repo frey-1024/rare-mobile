@@ -1,0 +1,24 @@
+@import "../../../styles/color";
+.home-demo{
+  padding: 0 10px;
+  background-color: $c-bg;
+  height: 100%;
+  .home-list-title{
+    font-size: 18px;
+    padding: 10px 0;
+  }
+  .home-child-list{
+    padding: 10px 15px;
+    background-color: $c-white;
+    display: block;
+    color: $c-black;
+    border-radius: 2px;
+    .child-list-title{
+      font-size: 16px;
+    }
+    .child-list-description{
+      padding-top: 8px;
+      font-size: 14px;
+    }
+  }
+}
