@@ -6,9 +6,16 @@ interface PullToRefreshNormalProps extends RouteProps{
 
 }
 
+interface CustomProps {
+  content: React.ReactNode,
+  className?: string,
+  type: 'init' | 'complete',
+  isShow: boolean
+}
+
 interface PullToRefreshNormalState {
   list: Array<any>,
-  initLoading: boolean
+  custom: CustomProps
 }
 
 export default class PullToRefreshNormalDemo extends React.Component<PullToRefreshNormalProps, PullToRefreshNormalState> {
@@ -16,7 +23,11 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
     super(props);
     this.state = {
       list: [],
-      initLoading: true,
+      custom: {
+        content: '加载中...',
+        type: 'init',
+        isShow: true
+      },
     };
   }
   componentDidMount() {
@@ -24,7 +35,11 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
     setTimeout(() => {
       this.setState({
         list: this.getList(true),
-        initLoading: false,
+        custom: {
+          content: '加载中...',
+          type: 'init',
+          isShow: false
+        },
       });
     }, 2000);
   }
@@ -49,24 +64,25 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
     event.doing();
     // 模拟刷新列表
     setTimeout(() => {
+      const list = this.getList(false);
       this.setState({
-        list: this.getList(false),
+        list,
+        custom: {
+          content: '已经加载完',
+          type: 'complete',
+          isShow: list.length > 50
+        }
       });
       event.done();
     }, 2000);
   }
   render() {
-    const {list, initLoading} = this.state;
+    const {list, custom} = this.state;
     return <div>
       <PullToRefreshNormal
         isRefresh
         style={{height: document && document.documentElement && document.documentElement.clientHeight}}
-        custom={{
-          content: '加载中...',
-          className: '',
-          type: 'init', // init, complete
-          isShow: initLoading
-        }}
+        custom={custom}
         onRefresh={(event: any) => this.refreshContent.call(this, event)}
         onLoaderMore={(event: any) => this.loaderMoreContent.call(this, event)}
       >

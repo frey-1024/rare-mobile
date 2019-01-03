@@ -42,7 +42,7 @@ module.exports = {
     'class-methods-use-this': 0,
     'func-names': 0,
     'no-unused-expressions': 'off',
-    'react/sort-comp': 1,
+    'react/sort-comp': 0,
     'react/prop-types': 0,
     'space-before-function-paren': [0, 'always'],
     'react/jsx-first-prop-new-line': 0,

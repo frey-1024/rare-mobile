@@ -13,14 +13,14 @@ interface PullProps {
 
 interface CustomProps {
   content: React.ReactNode,
-  className: string,
+  className?: string,
   type: 'init' | 'complete',
   isShow: boolean
 }
 
 interface PullToRefreshNormalProps {
   className?: string;
-  defaultClass?: string;
+  contentClassName?: string;
   isRefresh?: boolean,
   topPull?: PullProps,
   bottomPull?: PullProps,
@@ -33,7 +33,7 @@ interface PullToRefreshNormalProps {
 interface PullToRefreshNormalState {
   moveY: number, // 移动垂直距离
   isBack: boolean // 是否返回到原来的位置，加入translate动画
-  currentStatus: 'WILL' | 'DOING' | 'DONE',
+  currentStatus: 'WILL' | 'DOING' | 'DONE', // 当前滑动状态
   direction: string, // 移动方向
 }
 
@@ -57,9 +57,14 @@ const BOTTOM_PULL = {
 class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, PullToRefreshNormalState> {
 
   static defaultProps = {
-    defaultClass: 'rt-pull-normal',
     isRefresh: false,
   };
+
+  private $el: any;
+  private prefixCls: string = 'rt-pull-normal';
+  private startY: number;
+  private topPullIndicator: any;
+  private bottomPullIndicator: any;
 
   constructor(props: PullToRefreshNormalProps) {
     super(props);
@@ -80,16 +85,151 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     this.$el.removeEventListener('touchmove', this.handleTouchMove.bind(this), {passive: true});
     this.$el.removeEventListener('touchend', this.handleTouchEnd.bind(this), {passive: true});
   }
+  doing() {
+    this.setState({
+      currentStatus: 'DOING',
+      isBack: true
+    });
+  }
+  done() {
+    this.setState({
+      currentStatus: 'DONE',
+      moveY: 0,
+      isBack: true,
+    });
+  }
+  isRefuseMove() {
+    const {currentStatus} = this.state;
+    if (currentStatus === 'DOING') {
+      return true;
+    }
 
-  private prefixCls: string = 'rt-pull-normal';
-  private startY: number;
-  private topPullIndicator: any;
-  private bottomPullIndicator: any;
+    const {custom} = this.props;
+    if (!custom || !custom.isShow) {
+      return false;
+    }
 
+    return custom.type === 'init';
+  }
+  isComplete() {
+    const {custom} = this.props;
+    return custom && custom.isShow && custom.type === 'complete';
+  }
+  isScrollRange() {
+    const elScrollTop = this.$el.scrollTop;
+    const elScrollHeight = this.$el.scrollHeight;
+    const elOffsetHeight = this.$el.offsetHeight;
+    if (elScrollTop <= 0 || (elScrollTop + elOffsetHeight >= elScrollHeight)) {
+      return false;
+    }
+    return true;
+  }
+  handleTouchStart(event: any) {
+    if (this.isRefuseMove()) {
+      return;
+    }
+    const touch = event.changedTouches[0];
+    this.startY = touch.pageY;
+    this.setState({
+      isBack: false,
+      currentStatus: 'WILL'
+    });
+  }
+
+  getMoveYInfo(moveY: number, diff: number) {
+    const ratio = Math.abs(diff) / window.screen.height;
+    const dy = (1 - ratio) * diff * 0.55 + moveY;
+    if (dy > 0) {
+      const topDamping = this.topPullIndicator.damping;
+      return {
+        moveY: dy > topDamping ? topDamping : dy,
+        direction: 'UP'
+      };
+    }
+    if (dy < 0) {
+      const bottomDamping = this.bottomPullIndicator.damping;
+      return {
+        moveY: dy > bottomDamping ? -bottomDamping : dy,
+        direction: 'DOWN'
+      };
+    }
+    return {
+      moveY: dy,
+      direction: ''
+    };
+  }
+  handleTouchMove(event: any) {
+    if (this.isRefuseMove()) {
+      return;
+    }
+    const touch = event.changedTouches[0];
+    if (!this.isScrollRange()) {
+      const moveYInfo = this.getMoveYInfo(this.state.moveY, touch.pageY - this.startY);
+      this.setState({
+        moveY: (!this.props.isRefresh && moveYInfo.direction === 'UP') ? 0 : moveYInfo.moveY,
+        direction: moveYInfo.direction
+      });
+    }
+    this.startY = touch.pageY;
+  }
+  handleTouchEnd() {
+    if (this.isRefuseMove()) {
+      return;
+    }
+    const {moveY} = this.state;
+    const {onRefresh, onLoaderMore} = this.props;
+    // 下拉
+    if (moveY > 0) {
+      // 不支持刷新，将不能下拉
+      if (!this.props.isRefresh) {
+        return;
+      }
+      const topDistance = this.topPullIndicator.distanceToRefresh;
+      if (moveY < topDistance) {
+        this.setState({
+          moveY: 0,
+          isBack: true,
+        });
+      } else {
+        this.setState({
+          moveY: topDistance,
+          isBack: true,
+        });
+        if (onRefresh) {
+          onRefresh({doing: this.doing.bind(this), done: this.done.bind(this)});
+        }
+      }
+    } else if (moveY < 0) {
+      // 加载完成，将不能再加载，只能滑动
+      if (this.isComplete()) {
+        this.setState({
+          moveY: 0,
+          isBack: true,
+        });
+        return;
+      }
+      const bottomDistance = this.bottomPullIndicator.distanceToRefresh;
+      if (Math.abs(moveY) < bottomDistance) {
+        this.setState({
+          moveY: 0,
+          isBack: true,
+        });
+      } else {
+        this.setState({
+          moveY: -bottomDistance,
+          isBack: true,
+        });
+
+        if (onLoaderMore) {
+          onLoaderMore({doing: this.doing.bind(this), done: this.done.bind(this)});
+        }
+      }
+    }
+  }
   renderPullStatus(indicator: PullProps, className: string) {
     const {moveY, currentStatus, isBack} = this.state;
     const topTextClass = classNames(className, indicator.className);
-    if (this.isDoing()) {
+    if (currentStatus === 'DOING') {
       return <p className={topTextClass}>{indicator.loadingText}</p>;
     }
     // 触发刷新/加载
@@ -108,7 +248,7 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     return this.renderPullStatus(this.topPullIndicator, `${this.prefixCls}-top-text`);
   }
   renderBottomPull() {
-    if (this.state.direction === 'UP') {
+    if (this.state.direction === 'UP' || this.isComplete()) {
       return '';
     }
     return this.renderPullStatus(this.bottomPullIndicator, `${this.prefixCls}-bottom-text`);
@@ -124,131 +264,26 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     });
     return <div className={customClass}>{custom.content}</div>;
   }
-  doing() {
-    this.setState({
-      currentStatus: 'DOING',
-      isBack: true
-    });
-  }
-  done() {
-    this.setState({
-      currentStatus: 'DONE',
-      moveY: 0,
-      isBack: true,
-    });
-  }
-  isDoing() {
-    return this.state.currentStatus === 'DOING';
-  }
-  handleTouchStart(event: any) {
-    if (this.isDoing()) {
-      return;
-    }
-    const touch = event.changedTouches[0];
-    this.startY = touch.pageY;
-    this.setState({
-      isBack: false,
-      currentStatus: 'WILL'
-    });
-  }
-  isScrollRange() {
-    const elScrollTop = this.$el.scrollTop;
-    const elScrollHeight = this.$el.scrollHeight;
-    const elOffsetHeight = this.$el.offsetHeight;
-    if (elScrollTop <= 0 || (elScrollTop + elOffsetHeight >= elScrollHeight)) {
-      return false;
-    }
-    return true;
-  }
-  getMoveYInfo(moveY: number, diff: number) {
-    const ratio = Math.abs(diff) / window.screen.height;
-    const dy = (1 - ratio) * diff * 0.55 + moveY;
-    if (dy > 0) {
-      return {
-        moveY: dy > this.topPullIndicator.damping ? this.topPullIndicator.damping : dy,
-        direction: 'UP'
-      };
-    }
-    if (dy < 0) {
-      return {
-        moveY: dy > this.bottomPullIndicator.damping ? -this.bottomPullIndicator.damping : dy,
-        direction: 'DOWN'
-      };
-    }
-    return {
-      moveY: dy,
-      direction: ''
-    };
-  }
-  handleTouchMove(event: any) {
-    if (this.isDoing()) {
-      return;
-    }
-    const touch = event.changedTouches[0];
-    if (!this.isScrollRange()) {
-      const moveYInfo = this.getMoveYInfo(this.state.moveY, touch.pageY - this.startY);
-      this.setState({
-        moveY: moveYInfo.moveY,
-        direction: moveYInfo.direction
-      });
-    }
-    this.startY = touch.pageY;
-  }
-  handleTouchEnd() {
-    if (this.isDoing()) {
-      return;
-    }
-    const {moveY} = this.state;
-    const {onRefresh, onLoaderMore} = this.props;
-    // 下拉
-    if (moveY > 0) {
-      // 移动距离小于触发刷新的下拉高度, 恢复到原来位置，不做处理
-      if (moveY < this.topPullIndicator.distanceToRefresh) {
-        this.setState({
-          moveY: 0,
-          isBack: true,
-        });
-      } else {
-        this.setState({
-          moveY: this.topPullIndicator.distanceToRefresh,
-          isBack: true,
-        });
-        if (onRefresh) {
-          onRefresh({doing: this.doing.bind(this), done: this.done.bind(this)});
-        }
-      }
-    } else if (moveY < 0) {
-      if (Math.abs(moveY) < this.bottomPullIndicator.distanceToRefresh) {
-        this.setState({
-          moveY: 0,
-          isBack: true,
-        });
-      } else {
-        this.setState({
-          moveY: -this.bottomPullIndicator.distanceToRefresh,
-          isBack: true,
-        });
-        if (onLoaderMore) {
-          onLoaderMore({doing: this.doing.bind(this), done: this.done.bind(this)});
-        }
-      }
-    }
-  }
-  private $el: any;
   render() {
-    const {className, defaultClass, children, isRefresh, style} = this.props;
+    const {className, contentClassName, children, isRefresh, style} = this.props;
+    const {moveY, isBack} = this.state;
+
     this.topPullIndicator = {...TOP_PULL, ...this.props.topPull};
     this.bottomPullIndicator = {...BOTTOM_PULL, ...this.props.bottomPull};
-    const {moveY, isBack} = this.state;
-    const wrapClass = classNames(defaultClass, className);
+
+    const wrapClass = classNames(this.prefixCls, className);
+
     const contentClass = classNames(
       `${this.prefixCls}-content`,
+      contentClassName,
       {
         [`${this.prefixCls}-transitions`]: isBack
       });
+
     const styles = {
       transform: `translate3d(0, ${moveY}px, 0)`,
     };
+
     return (<div style={style} className={wrapClass} ref={(el: any) => this.$el = el}>
       <div className={`${this.prefixCls}-content-wrapper`}>
         <div
