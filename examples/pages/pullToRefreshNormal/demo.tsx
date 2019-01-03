@@ -81,6 +81,9 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
     return <div>
       <PullToRefreshNormal
         isRefresh
+        topPull={{
+          loadingText: <p>loading...</p>
+        }}
         style={{height: document && document.documentElement && document.documentElement.clientHeight}}
         custom={custom}
         onRefresh={(event: any) => this.refreshContent.call(this, event)}

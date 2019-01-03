@@ -1,6 +1,6 @@
 {
   "name": "rare-mobile",
-  "version": "0.0.312",
+  "version": "0.0.32",
   "description": "rare-mobile",
   "main": "lib/index.js",
   "scripts": {

@@ -2,13 +2,13 @@ import React from 'react';
 import classNames from 'classnames';
 
 interface PullProps {
-  className: string,
-  damping: number,
-  distanceToRefresh: number,
-  text: React.ReactNode,
-  activeText: React.ReactNode,
-  loadingText: React.ReactNode,
-  finishText: React.ReactNode,
+  className?: string,
+  damping?: number,
+  distanceToRefresh?: number,
+  text?: React.ReactNode,
+  activeText?: React.ReactNode,
+  loadingText?: React.ReactNode,
+  finishText?: React.ReactNode,
 }
 
 interface CustomProps {
@@ -58,6 +58,13 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
 
   static defaultProps = {
     isRefresh: false,
+    topPull: {},
+    bottomPull: {},
+    custom: {
+      content: '加载中...',
+      type: 'init',
+      isShow: false
+    } as CustomProps
   };
 
   private $el: any;
@@ -226,7 +233,7 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
       }
     }
   }
-  renderPullStatus(indicator: PullProps, className: string) {
+  renderPullStatus(indicator: any, className: string) {
     const {moveY, currentStatus, isBack} = this.state;
     const topTextClass = classNames(className, indicator.className);
     if (currentStatus === 'DOING') {
@@ -268,8 +275,8 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     const {className, contentClassName, children, isRefresh, style} = this.props;
     const {moveY, isBack} = this.state;
 
-    this.topPullIndicator = {...TOP_PULL, ...this.props.topPull};
-    this.bottomPullIndicator = {...BOTTOM_PULL, ...this.props.bottomPull};
+    this.topPullIndicator = {...(TOP_PULL as PullProps), ...(this.props.topPull as PullProps)};
+    this.bottomPullIndicator = {...(BOTTOM_PULL as PullProps), ...(this.props.bottomPull as PullProps)};
 
     const wrapClass = classNames(this.prefixCls, className);
 
