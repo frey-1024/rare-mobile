@@ -8,7 +8,7 @@ $namespace: rt-pull-normal;
     overflow: hidden;
     .#{$namespace}-content{
       &.#{$namespace}-transitions {
-        transition: all .4s;
+        transition: transform .4s;
       }
     }
     .#{$namespace}-top-text, .#{$namespace}-bottom-text{

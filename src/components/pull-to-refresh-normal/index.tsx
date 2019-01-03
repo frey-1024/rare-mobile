@@ -33,7 +33,8 @@ interface PullToRefreshNormalProps {
 interface PullToRefreshNormalState {
   moveY: number, // 移动垂直距离
   isBack: boolean // 是否返回到原来的位置，加入translate动画
-  refreshing: boolean,
+  currentStatus: 'WILL' | 'DOING' | 'DONE',
+  direction: string, // 移动方向
 }
 
 const TOP_PULL = {
@@ -65,7 +66,8 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     this.state = {
       moveY: 0,
       isBack: false,
-      refreshing: false,
+      currentStatus: 'WILL',
+      direction: ''
     };
   }
   componentDidMount() {
@@ -85,25 +87,30 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
   private bottomPullIndicator: any;
 
   renderPullStatus(indicator: PullProps, className: string) {
-    const {moveY, refreshing, isBack} = this.state;
+    const {moveY, currentStatus, isBack} = this.state;
     const topTextClass = classNames(className, indicator.className);
-    if (refreshing) {
+    if (this.isDoing()) {
       return <p className={topTextClass}>{indicator.loadingText}</p>;
     }
-    // 移动距离小于触发刷新的下拉高度
-    if (moveY < indicator.distanceToRefresh) {
-      return <p className={topTextClass}>{indicator.text}</p>;
+    // 触发刷新/加载
+    if (Math.abs(moveY) >= indicator.distanceToRefresh && !isBack) {
+      return <p className={topTextClass}>{indicator.activeText}</p>;
     }
-    if (!refreshing && moveY === 0 && isBack) {
+    if (currentStatus === 'DONE') {
       return <p className={topTextClass}>{indicator.finishText}</p>;
     }
-    // 移动距离大于等于触发刷新的下拉高度
-    return <p className={topTextClass}>{indicator.activeText}</p>;
+    return <p className={topTextClass}>{indicator.text}</p>;
   }
   renderTopPull() {
+    if (this.state.direction === 'DOWN') {
+      return '';
+    }
     return this.renderPullStatus(this.topPullIndicator, `${this.prefixCls}-top-text`);
   }
   renderBottomPull() {
+    if (this.state.direction === 'UP') {
+      return '';
+    }
     return this.renderPullStatus(this.bottomPullIndicator, `${this.prefixCls}-bottom-text`);
   }
   renderCustom() {
@@ -119,18 +126,19 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
   }
   doing() {
     this.setState({
-      refreshing: true
+      currentStatus: 'DOING',
+      isBack: true
     });
   }
   done() {
     this.setState({
-      refreshing: false,
+      currentStatus: 'DONE',
       moveY: 0,
       isBack: true,
     });
   }
   isDoing() {
-    return this.state.refreshing;
+    return this.state.currentStatus === 'DOING';
   }
   handleTouchStart(event: any) {
     if (this.isDoing()) {
@@ -140,6 +148,7 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     this.startY = touch.pageY;
     this.setState({
       isBack: false,
+      currentStatus: 'WILL'
     });
   }
   isScrollRange() {
@@ -151,14 +160,25 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     }
     return true;
   }
-  getMoveY(val: number) {
-    if (val > 0) {
-      return val > this.topPullIndicator.damping ? this.topPullIndicator.damping : val;
+  getMoveYInfo(moveY: number, diff: number) {
+    const ratio = Math.abs(diff) / window.screen.height;
+    const dy = (1 - ratio) * diff * 0.55 + moveY;
+    if (dy > 0) {
+      return {
+        moveY: dy > this.topPullIndicator.damping ? this.topPullIndicator.damping : dy,
+        direction: 'UP'
+      };
     }
-    if (val < 0) {
-      return Math.abs(val) > this.bottomPullIndicator.damping ? -this.bottomPullIndicator.damping : val;
+    if (dy < 0) {
+      return {
+        moveY: dy > this.bottomPullIndicator.damping ? -this.bottomPullIndicator.damping : dy,
+        direction: 'DOWN'
+      };
     }
-    return val;
+    return {
+      moveY: dy,
+      direction: ''
+    };
   }
   handleTouchMove(event: any) {
     if (this.isDoing()) {
@@ -166,8 +186,10 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     }
     const touch = event.changedTouches[0];
     if (!this.isScrollRange()) {
+      const moveYInfo = this.getMoveYInfo(this.state.moveY, touch.pageY - this.startY);
       this.setState({
-        moveY: this.getMoveY(this.state.moveY + touch.pageY - this.startY)
+        moveY: moveYInfo.moveY,
+        direction: moveYInfo.direction
       });
     }
     this.startY = touch.pageY;
