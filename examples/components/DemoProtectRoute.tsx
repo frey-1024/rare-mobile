@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  Redirect,
+  // Redirect,
   Route,
 } from "react-router-dom";
-import {isMobile} from "../utils/assert";
+// import {isMobile} from "../utils/assert";
 import DemoPage from './DemoPage';
 
 interface ProtectRouteProps extends RouteProps{
@@ -16,17 +16,17 @@ interface ProtectRouteProps extends RouteProps{
 
 export default class DemoProtectRoute extends React.Component<ProtectRouteProps, any>{
   render() {
-    const { pathname, docPath } = this.props;
+    // const { pathname, docPath } = this.props;
     // 需要登录
-    if (!isMobile()) {
-      return (
-        <Redirect
-          to={{
-            pathname: `/doc/${docPath ? docPath : pathname}`,
-          }}
-        />
-      );
-    }
+    // if (!isMobile()) {
+    //   return (
+    //     <Redirect
+    //       to={{
+    //         pathname: `/doc/${docPath ? docPath : pathname}`,
+    //       }}
+    //     />
+    //   );
+    // }
 
     return (
       <Route

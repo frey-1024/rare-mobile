@@ -1,14 +1,14 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const ip = require('ip');
 const autoprefixer = require('autoprefixer');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const cssnano = require('cssnano');
 const baseConfig = require('./webpack.base.js');
 const { getProjectPath } = require('./utils');
-
 const pkg = require(getProjectPath('package.json'));
 const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
-const HOST = process.env.HOST || 'localhost';
+const HOST = process.env.HOST || ip.address() || 'localhost';
 const PORT = process.env.PORT || 8081;
 
 module.exports = merge(baseConfig(), {
@@ -83,6 +83,14 @@ module.exports = merge(baseConfig(), {
                 loader: 'sass-loader'
               }
             ]
+          },
+          {
+            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              name: 'static/media/[name].[hash:8].[ext]',
+            },
           },
           {
             exclude: [/\.(js|jsx|tsx|ts)$/, /\.html$/, /\.json$/],

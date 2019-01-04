@@ -1,0 +1,59 @@
+@import "../color";
+
+// 文字省略号
+.text-eps{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.text-red{
+  color:$c-red;
+}
+.text-gray{
+  color: $c-gray;
+}
+.text-white{
+  color: $c-white;
+}
+.text-blue{
+  color: $c-blue;
+}
+.text-green{
+  color: $c-green;
+}
+.text-orange{
+  color: $c-orange;
+}
+
+
+.text-gray-hover{
+  @extend .text-gray;
+  cursor: pointer;
+  &:hover{
+    @extend .text-green;
+  }
+}
+
+.text-left{
+  text-align: left;
+}
+.text-right{
+  text-align: right;
+}
+.text-center{
+  text-align: center;
+}
+.text-underline{
+  text-decoration: underline;
+}
+
+.hover-blue:hover{
+  color: $c-blue;
+}
+.hover-red:hover{
+  color: $c-red;
+}
+.pointer{
+  cursor: pointer;
+}

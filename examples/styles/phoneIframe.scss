@@ -1,0 +1,31 @@
+@import "color";
+
+.phone-iframe-wrapper{
+  width: 375px;
+  height: 667px;
+  border: 1px solid $c-border;
+  .phone-title{
+    background: linear-gradient(rgba(55,55,55,.98),#545456);
+    border-bottom: 1px solid $c-light-border;
+    padding: 6px 10px 10px;
+  }
+  .phone-title-img{
+    width: 100%;
+  }
+  .phone-title-url{
+    width: 100%;
+    display: block;
+    margin-top: 4px;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    background-color: #a2a2a2;
+    border-radius: 4px;
+    white-space: nowrap;
+    border: none;
+    padding: 0 6px;
+  }
+  .phone-content{
+    height: 607px;
+  }
+}

@@ -16,7 +16,6 @@ interface ProtectRouteProps extends RouteProps{
 
 export default class DocProtectRoute extends React.Component<ProtectRouteProps, any>{
   render() {
-    console.log(this.props, 'aaa');
     const { pathname, demoPath } = this.props;
     // 需要登录
     if (isMobile()) {

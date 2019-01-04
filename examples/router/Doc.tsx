@@ -17,7 +17,6 @@ export default class Doc extends React.Component<DocProps, any>{
     });
   }
   render() {
-    console.log(this.props);
     return (
       <Fragment>
         <Switch>

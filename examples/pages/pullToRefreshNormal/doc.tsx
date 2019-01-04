@@ -1,8 +1,13 @@
 import React from 'react';
+import MarkdownRun from '@/components/MarkdownRun';
+import introduce from './introduce.md';
 
 export default class PullToRefreshNormalDoc extends React.Component {
   render() {
-    console.log('aaa');
-    return 'pull -pc';
+    return <div>
+      <MarkdownRun
+        mark={introduce}
+      />
+    </div>;
   }
 }

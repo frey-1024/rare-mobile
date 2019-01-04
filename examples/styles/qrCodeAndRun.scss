@@ -1,0 +1,19 @@
+@import "color";
+
+.qrcode-and-run-wrapper{
+  margin: 15px 0;
+  .qrcode-and-run-content{
+    padding: 10px 15px;
+  }
+  .qrcode-wrapper{
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid $c-border;
+    border-radius: 6px;
+    margin: 0 15px 0;
+    .qrcode-tip{
+      padding: 6px 15px;
+    }
+  }
+}
+
