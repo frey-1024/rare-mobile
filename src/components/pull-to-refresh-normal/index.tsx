@@ -32,7 +32,7 @@ interface PullToRefreshNormalProps {
 
 interface PullToRefreshNormalState {
   moveY: number, // 移动垂直距离
-  isBack: boolean // 是否返回到原来的位置，加入translate动画
+  isBack: boolean, // 是否返回到原来的位置，加入translate动画
   currentStatus: 'WILL' | 'DOING' | 'DONE', // 当前滑动状态
   direction: string, // 移动方向
 }
@@ -53,6 +53,19 @@ const BOTTOM_PULL = {
   loadingText: '加载中...',
   finishText: '加载成功',
 };
+
+let supportsPassive = false;
+try {
+  const opts = Object.defineProperty({}, 'passive', {
+    get() {
+      supportsPassive = true;
+    },
+  });
+  window.addEventListener('test', null as any, opts);
+} catch (e) {
+  // empty
+}
+const willPreventDefault = supportsPassive ? { passive: false } : false;
 
 class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, PullToRefreshNormalState> {
 
@@ -83,18 +96,19 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     };
   }
   componentDidMount() {
-    this.$el.addEventListener('touchstart', this.handleTouchStart.bind(this), {passive: true});
-    this.$el.addEventListener('touchmove', this.handleTouchMove.bind(this), {passive: true});
-    this.$el.addEventListener('touchend', this.handleTouchEnd.bind(this), {passive: true});
+    this.$el.addEventListener('touchstart', this.handleTouchStart.bind(this), willPreventDefault);
+    this.$el.addEventListener('touchmove', this.handleTouchMove.bind(this), willPreventDefault);
+    this.$el.addEventListener('touchend', this.handleTouchEnd.bind(this), willPreventDefault);
   }
   componentWillUnmount() {
-    this.$el.removeEventListener('touchstart', this.handleTouchStart.bind(this), {passive: true});
-    this.$el.removeEventListener('touchmove', this.handleTouchMove.bind(this), {passive: true});
-    this.$el.removeEventListener('touchend', this.handleTouchEnd.bind(this), {passive: true});
+    this.$el.removeEventListener('touchstart', this.handleTouchStart.bind(this), willPreventDefault);
+    this.$el.removeEventListener('touchmove', this.handleTouchMove.bind(this), willPreventDefault);
+    this.$el.removeEventListener('touchend', this.handleTouchEnd.bind(this), willPreventDefault);
   }
-  doing() {
+  doing(moveY: number) {
     this.setState({
       currentStatus: 'DOING',
+      moveY,
       isBack: true
     });
   }
@@ -127,8 +141,10 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     const elScrollHeight = this.$el.scrollHeight;
     const elOffsetHeight = this.$el.offsetHeight;
     if (elScrollTop <= 0 || (elScrollTop + elOffsetHeight >= elScrollHeight)) {
+      console.log('aaaa');
       return false;
     }
+    console.log('bbb');
     return true;
   }
   handleTouchStart(event: any) {
@@ -136,10 +152,11 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
       return;
     }
     const touch = event.changedTouches[0];
-    this.startY = touch.pageY;
+    this.startY = touch.screenY;
     this.setState({
       isBack: false,
-      currentStatus: 'WILL'
+      currentStatus: 'WILL',
+      direction: '',
     });
   }
 
@@ -156,7 +173,7 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     if (dy < 0) {
       const bottomDamping = this.bottomPullIndicator.damping;
       return {
-        moveY: dy > bottomDamping ? -bottomDamping : dy,
+        moveY: dy < -bottomDamping ? -bottomDamping : dy,
         direction: 'DOWN'
       };
     }
@@ -170,14 +187,16 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
       return;
     }
     const touch = event.changedTouches[0];
+    const diff = touch.screenY - this.startY;
     if (!this.isScrollRange()) {
-      const moveYInfo = this.getMoveYInfo(this.state.moveY, touch.pageY - this.startY);
+      event.preventDefault();
+      const moveYInfo = this.getMoveYInfo(this.state.moveY, diff);
       this.setState({
         moveY: (!this.props.isRefresh && moveYInfo.direction === 'UP') ? 0 : moveYInfo.moveY,
         direction: moveYInfo.direction
       });
     }
-    this.startY = touch.pageY;
+    this.startY = touch.screenY;
   }
   handleTouchEnd() {
     if (this.isRefuseMove()) {
@@ -198,12 +217,8 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
           isBack: true,
         });
       } else {
-        this.setState({
-          moveY: topDistance,
-          isBack: true,
-        });
         if (onRefresh) {
-          onRefresh({doing: this.doing.bind(this), done: this.done.bind(this)});
+          onRefresh({doing: () => this.doing.call(this, topDistance), done: this.done.bind(this)});
         }
       }
     } else if (moveY < 0) {
@@ -222,13 +237,8 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
           isBack: true,
         });
       } else {
-        this.setState({
-          moveY: -bottomDistance,
-          isBack: true,
-        });
-
         if (onLoaderMore) {
-          onLoaderMore({doing: this.doing.bind(this), done: this.done.bind(this)});
+          onLoaderMore({doing: () => this.doing.call(this, -bottomDistance), done: this.done.bind(this)});
         }
       }
     }

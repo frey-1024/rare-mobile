@@ -54,8 +54,14 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
     event.doing();
     // 模拟刷新列表
     setTimeout(() => {
+      const list = this.getList(true);
       this.setState({
-        list: this.getList(true),
+        list,
+        custom: {
+          content: '已经加载完',
+          type: 'complete',
+          isShow: list.length > 50
+        }
       });
       event.done();
     }, 2000);
@@ -79,9 +85,10 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
   render() {
     const {list, custom} = this.state;
     return <div>
+      <h2>返回</h2>
       <PullToRefreshNormal
         isRefresh
-        style={{height: document && document.documentElement && document.documentElement.clientHeight}}
+        style={{height: '300px'}}
         custom={custom}
         onRefresh={(event: any) => this.refreshContent.call(this, event)}
         onLoaderMore={(event: any) => this.loaderMoreContent.call(this, event)}
