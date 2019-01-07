@@ -1,6 +1,6 @@
 {
   "name": "rare-mobile",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "rare-mobile",
   "main": "lib/index.js",
   "scripts": {
@@ -11,8 +11,8 @@
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
-    "lib": "./node_modules/.bin/gulp build",
-    "build:lib": "npm run eslint && npm run lib",
+    "lib": "npm run eslint && npm run build:lib",
+    "build:lib": "./node_modules/.bin/gulp build",
     "eslint": "eslint examples --ext .tsx --ext .ts"
   },
   "repository": {

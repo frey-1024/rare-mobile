@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from "react-dom";
 import { PullToRefreshNormal } from 'rate-mobile/index';
 import './styles/demo.scss';
 
@@ -15,10 +16,12 @@ interface CustomProps {
 
 interface PullToRefreshNormalState {
   list: Array<any>,
-  custom: CustomProps
+  custom: CustomProps,
+  height: number
 }
 
 export default class PullToRefreshNormalDemo extends React.Component<PullToRefreshNormalProps, PullToRefreshNormalState> {
+  private scrollEl: any;
   constructor(props: PullToRefreshNormalProps) {
     super(props);
     this.state = {
@@ -28,12 +31,19 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
         type: 'init',
         isShow: true
       },
+      height: (document && document.documentElement && document.documentElement.clientHeight) || 100,
     };
   }
   componentDidMount() {
+    let height = this.state.height;
+    const scrollEl = ReactDOM.findDOMNode(this.scrollEl);
+    if (scrollEl) {
+      height -= (scrollEl as HTMLElement).offsetTop;
+    }
     // 模拟首次加载
     setTimeout(() => {
       this.setState({
+        height,
         list: this.getList(true),
         custom: {
           content: '加载中...',
@@ -83,12 +93,12 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
     }, 2000);
   }
   render() {
-    const {list, custom} = this.state;
+    const {list, custom, height} = this.state;
     return <div>
-      <h2>返回</h2>
       <PullToRefreshNormal
+        ref={(el: any) => this.scrollEl = el}
         isRefresh
-        style={{height: '300px'}}
+        style={{height: height}}
         custom={custom}
         onRefresh={(event: any) => this.refreshContent.call(this, event)}
         onLoaderMore={(event: any) => this.loaderMoreContent.call(this, event)}

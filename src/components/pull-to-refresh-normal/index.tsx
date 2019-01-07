@@ -39,7 +39,7 @@ interface PullToRefreshNormalState {
 
 const TOP_PULL = {
   damping: 150,
-  distanceToRefresh: 35,
+  distanceToRefresh: 40,
   text: '下拉可以刷新',
   activeText: '释放立即刷新',
   loadingText: '刷新中...',
@@ -47,7 +47,7 @@ const TOP_PULL = {
 };
 const BOTTOM_PULL = {
   damping: 150,
-  distanceToRefresh: 35,
+  distanceToRefresh: 40,
   text: '上拉可以加载',
   activeText: '释放立即加载',
   loadingText: '加载中...',
@@ -136,15 +136,18 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     const {custom} = this.props;
     return custom && custom.isShow && custom.type === 'complete';
   }
-  isScrollRange() {
+  isScrollRange(moveYInfo: any) {
     const elScrollTop = this.$el.scrollTop;
     const elScrollHeight = this.$el.scrollHeight;
     const elOffsetHeight = this.$el.offsetHeight;
-    if (elScrollTop <= 0 || (elScrollTop + elOffsetHeight >= elScrollHeight)) {
-      console.log('aaaa');
-      return false;
+    if (elScrollTop <= 0) {
+      // 这里加入 elOffsetHeight !== elScrollHeight 是为了解决当容器内容总高度没有超出容器高度时，
+      // 如果数据没有加载完， 可以继续滑动加载
+      return moveYInfo.direction === 'UP' && elOffsetHeight !== elScrollHeight;
     }
-    console.log('bbb');
+    if (elScrollTop + elOffsetHeight >= elScrollHeight) {
+      return moveYInfo.direction === 'DOWN';
+    }
     return true;
   }
   handleTouchStart(event: any) {
@@ -162,19 +165,19 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
 
   getMoveYInfo(moveY: number, diff: number) {
     const ratio = Math.abs(diff) / window.screen.height;
-    const dy = (1 - ratio) * diff * 0.55 + moveY;
+    const dy = (1 - ratio) * diff * 0.52 + moveY;
     if (dy > 0) {
       const topDamping = this.topPullIndicator.damping;
       return {
         moveY: dy > topDamping ? topDamping : dy,
-        direction: 'UP'
+        direction: 'DOWN'
       };
     }
     if (dy < 0) {
       const bottomDamping = this.bottomPullIndicator.damping;
       return {
         moveY: dy < -bottomDamping ? -bottomDamping : dy,
-        direction: 'DOWN'
+        direction: 'UP'
       };
     }
     return {
@@ -183,16 +186,17 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     };
   }
   handleTouchMove(event: any) {
+    const touch = event.changedTouches[0];
+    const diff = touch.screenY - this.startY;
+    const moveYInfo = this.getMoveYInfo(this.state.moveY, diff);
     if (this.isRefuseMove()) {
       return;
     }
-    const touch = event.changedTouches[0];
-    const diff = touch.screenY - this.startY;
-    if (!this.isScrollRange()) {
+    if (!this.isScrollRange(moveYInfo)) {
       event.preventDefault();
-      const moveYInfo = this.getMoveYInfo(this.state.moveY, diff);
+
       this.setState({
-        moveY: (!this.props.isRefresh && moveYInfo.direction === 'UP') ? 0 : moveYInfo.moveY,
+        moveY: (!this.props.isRefresh && moveYInfo.direction === 'DOWN') ? 0 : moveYInfo.moveY,
         direction: moveYInfo.direction
       });
     }
@@ -259,13 +263,13 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
     return <p className={topTextClass}>{indicator.text}</p>;
   }
   renderTopPull() {
-    if (this.state.direction === 'DOWN') {
+    if (this.state.direction === 'UP') {
       return '';
     }
     return this.renderPullStatus(this.topPullIndicator, `${this.prefixCls}-top-text`);
   }
   renderBottomPull() {
-    if (this.state.direction === 'UP' || this.isComplete()) {
+    if (this.state.direction === 'DOWN' || this.isComplete()) {
       return '';
     }
     return this.renderPullStatus(this.bottomPullIndicator, `${this.prefixCls}-bottom-text`);
