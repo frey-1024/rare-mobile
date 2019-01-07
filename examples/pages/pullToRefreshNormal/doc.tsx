@@ -4,10 +4,6 @@ import introduce from './introduce.md';
 
 export default class PullToRefreshNormalDoc extends React.Component {
   render() {
-    return <div>
-      <MarkdownRun
-        mark={introduce}
-      />
-    </div>;
+    return <MarkdownRun mark={introduce}/>;
   }
 }

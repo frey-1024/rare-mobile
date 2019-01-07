@@ -1,8 +1,13 @@
-.doc-container{
-  position: relative;
-  width: 100%;
-  overflow: auto;
-  .doc-content{
+@import "color";
 
+.doc-container{
+  .doc-content{
+    position: relative;
+    padding-top: 64px;
+  }
+  .doc-left-divider{
+    margin-left: -1px;
+    border-left: 1px solid $c-light-border;
+    padding-left: 15px;
   }
 }

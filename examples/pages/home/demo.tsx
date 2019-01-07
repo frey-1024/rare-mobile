@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {Link} from 'react-router-dom';
-import {demoList} from './utils/menu';
+import {demoList} from '../../utils/demoMenu';
 import './styles/demo.scss';
 
 export default class HomeDemo extends React.Component {

@@ -3,6 +3,7 @@ import { Switch, Redirect } from 'react-router-dom';
 import DocProtectRoute from '../components/DocProtectRoute';
 import { getDocRouters } from './routerSplit';
 import '../styles/docBase.scss';
+import Header from "../components/Header";
 
 const docRouters = getDocRouters();
 
@@ -19,9 +20,10 @@ export default class Doc extends React.Component<DocProps, any>{
   render() {
     return (
       <Fragment>
+        <Header/>
         <Switch>
           {this.getAvailableRouter()}
-          <Redirect to="/notFound" />
+          <Redirect to="/doc" />
         </Switch>
       </Fragment>
     );

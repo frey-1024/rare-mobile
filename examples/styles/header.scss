@@ -1,0 +1,32 @@
+@import "color";
+$header: doc-header;
+
+.#{$header}{
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  background-color: $c-white;
+  box-shadow: 0 2px 8px #f0f1f2;
+  &-nav{
+    position: relative;
+    height: 50px;
+    font-size: 16px;
+    .logo{
+      height: 36px;
+    }
+    .logo-text{
+      font-size: 20px;
+      padding-left: 15px;
+    }
+    .nav-item{
+      color: $c-gray;
+      margin-left: 15px;
+      padding: 6px 15px;
+      &:hover, &.active{
+        color: $c-blue;
+      }
+    }
+  }
+}

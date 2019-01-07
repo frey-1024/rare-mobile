@@ -1,5 +1,5 @@
 export const pullToRefreshNormalDocRouters = [{
-  pathname: '/pull-to-refresh-normal',
+  pathname: '/components/pull-to-refresh-normal',
   url: 'pages/pullToRefreshNormal/doc'
 }];
 
