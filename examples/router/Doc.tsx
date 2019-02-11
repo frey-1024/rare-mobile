@@ -7,15 +7,11 @@ import Header from "../components/Header";
 
 const docRouters = getDocRouters();
 
-interface DocProps extends RouteProps{
-}
-
-export default class Doc extends React.Component<DocProps, any>{
+export default class Doc extends React.Component<RouteProps, any> {
   getAvailableRouter() {
     const { match } = this.props;
-    return docRouters.map((route: any) => {
-      return <DocProtectRoute {...this.props} key={route.pathname} exact={!route.notExact} path={`${match.path}${route.pathname}`} component={route.component}/>;
-    });
+    return docRouters.map((route: any) =>
+      <DocProtectRoute {...this.props} key={route.pathname} exact={!route.notExact} path={`${match.path}${route.pathname}`} component={route.component}/>);
   }
   render() {
     return (

@@ -1,5 +1,13 @@
 export const navList = [
   {
+    title: '介绍',
+    docBasePath: '/doc/components',
+    children: [{
+      path: '/start',
+      title: '快速上手',
+      description: '快速上手的方法'
+    }]
+  }, {
     title: '数据加载--滑动',
     docBasePath: '/doc/components',
     children: [{
