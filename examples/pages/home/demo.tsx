@@ -1,13 +1,13 @@
 import React, {Fragment} from 'react';
 import {Link} from 'react-router-dom';
-import {demoList} from '../../utils/demoMenu';
+import {navList} from '../../utils/navMenu';
 import './styles/demo.scss';
 
 export default class HomeDemo extends React.Component {
   render() {
     return <div className="home-demo">
       {
-        demoList.map((item: any) => {
+        navList.map((item: any) => {
           return <Fragment key={item.title}>
             <h3 className="home-list-title">{item.title}</h3>
             {item.children.map((child: any) => {

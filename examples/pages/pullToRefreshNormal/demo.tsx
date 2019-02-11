@@ -94,7 +94,7 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
   }
   render() {
     const {list, custom, height} = this.state;
-    return <div>
+    return (
       <PullToRefreshNormal
         ref={(el: any) => this.scrollEl = el}
         isRefresh
@@ -107,6 +107,6 @@ export default class PullToRefreshNormalDemo extends React.Component<PullToRefre
           {list.map((item: any) => (<li key={item.val}>{item.val}</li>))}
         </ul>
       </PullToRefreshNormal>
-    </div>;
+    );
   }
 }

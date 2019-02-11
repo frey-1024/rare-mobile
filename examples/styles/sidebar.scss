@@ -1,0 +1,27 @@
+@import "color";
+
+.sidebar-wrapper{
+  background-color: #fff;
+  border-right: 1px solid #eee;
+  width: 245px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  .sidebar-item-title{
+    font-size: 16px;
+    margin: 15px 0 6px;
+    display: block;
+  }
+  .sidebar-children{
+    font-size: 14px;
+    & > li > a{
+      color: $c-text;
+      display: block;
+      padding: 12px 15px 0 10px;
+      &:hover, &.active{
+        color: $c-blue;
+      }
+    }
+  }
+}

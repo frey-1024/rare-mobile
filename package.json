@@ -86,6 +86,7 @@
     "through2": "^3.0.0",
     "ts-loader": "^5.3.1",
     "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.18.0",
     "tslint-eslint-rules": "^5.4.0",
     "tslint-loader": "^3.5.4",
     "tslint-react": "^3.6.0",

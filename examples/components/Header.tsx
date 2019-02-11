@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import {Link, withRouter} from 'react-router-dom';
 import '../styles/header.scss';
 
-class Header extends React.Component<RouteProps, any>{
+class Header extends React.Component<RouteProps, any> {
   render() {
     const {location} = this.props;
     const navList = [{
