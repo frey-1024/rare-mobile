@@ -7,7 +7,7 @@ interface QRCodeAndRunProps {
   url: string,
 }
 
-export default class QRCodeAndRun extends React.PureComponent<QRCodeAndRunProps, any>{
+export default class QRCodeAndRun extends React.PureComponent<QRCodeAndRunProps, any> {
   render() {
     const href = `${window.location.origin}${this.props.url}`;
     return (<div className="qrcode-and-run-wrapper">

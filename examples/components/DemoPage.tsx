@@ -5,7 +5,7 @@ interface DocPageProps {
   component: any,
 }
 
-export default class DocPage extends React.Component<DocPageProps, any>{
+export default class DocPage extends React.Component<DocPageProps, any> {
   render() {
     const { component: Component } = this.props;
     return (
