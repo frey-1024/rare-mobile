@@ -311,7 +311,7 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
           className={contentClass}
           style={styles}
         >
-          {isRefresh ? this.renderTopPull(): ''}
+          {isRefresh ? this.renderTopPull() : ''}
           {children}
           {this.renderCustom()}
           {this.renderBottomPull()}
