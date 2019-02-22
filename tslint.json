@@ -110,10 +110,7 @@
     "jsx-no-bind": false,
     "no-eval": true,
     "arrow-parens": true,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
+    "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
     "no-shadowed-variable": true,
     "no-string-throw": true,
     "no-switch-case-fall-through": true,
