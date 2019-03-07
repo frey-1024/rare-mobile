@@ -81,7 +81,7 @@ class PullToRefreshNormal extends React.Component<PullToRefreshNormalProps, Pull
   };
 
   private $el: any;
-  private prefixCls: string = 'rt-pull-normal';
+  private prefixCls = 'rt-pull-normal';
   private startY: number;
   private topPullIndicator: any;
   private bottomPullIndicator: any;

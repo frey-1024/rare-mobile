@@ -8,7 +8,7 @@ import QRCodeAndRun from '@/components/QRCodeAndRun';
 import 'highlight.js/styles/github.css';
 import '../styles/markdownRun.scss';
 
-interface MarkdownRunProps extends RouteProps{
+interface MarkdownRunProps extends RouteProps {
   mark: string
 }
 
@@ -29,7 +29,7 @@ function parserMark(mark: string) {
     });
     return id;
   });
-  let rest: Array<any> = [];
+  const rest: Array<any> = [];
   let nextMarkdownString = currentMark;
   // 把拆分的代码再次处理，按照顺序保存成数组
   for (let i = 0, l = result.length, item; i < l; i++) {

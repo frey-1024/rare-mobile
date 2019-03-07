@@ -6,7 +6,7 @@ import {
 import {isMobile} from "../utils/assert";
 import DocPage from './DocPage';
 
-interface ProtectRouteProps extends RouteProps{
+interface ProtectRouteProps extends RouteProps {
   pathname?: string,
   demoPath?: string,
   exact?: boolean,
@@ -14,7 +14,7 @@ interface ProtectRouteProps extends RouteProps{
   component: any
 }
 
-export default class DocProtectRoute extends React.Component<ProtectRouteProps, any>{
+export default class DocProtectRoute extends React.Component<ProtectRouteProps, any> {
   render() {
     const { pathname, demoPath } = this.props;
     // 需要登录
@@ -30,9 +30,8 @@ export default class DocProtectRoute extends React.Component<ProtectRouteProps, 
 
     return (
       <Route
-        render={(props: any) => {
-          return (<DocPage {...props} {...this.props} />);
-        }}
+        render={(props: any) =>
+          (<DocPage {...props} {...this.props} />)}
       />
     );
   }

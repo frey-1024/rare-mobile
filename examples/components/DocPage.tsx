@@ -3,11 +3,11 @@ import classNames from 'classnames';
 import '../styles/docPage.scss';
 import Sidebar from "./Sidebar";
 
-interface DocPageProps extends RouteProps{
+interface DocPageProps extends RouteProps {
   component: any,
 }
 
-export default class DocPage extends React.Component<DocPageProps, any>{
+export default class DocPage extends React.Component<DocPageProps, any> {
   render() {
     const { component: Component, location } = this.props;
     const isComponentsDoc = location.pathname.indexOf('/doc/components') >= 0;
