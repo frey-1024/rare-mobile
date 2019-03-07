@@ -1,0 +1,18 @@
+$values: (6) (8) (10) (15) (20) (30);
+@mixin generateBox($list){
+  @each $m in $list{
+    $type:nth($m, 1);
+    $key:nth($m, 2);
+    @each $val in $values{
+      $value: #{nth($val,1)};
+      .#{$type}-#{$value}{
+        #{$key}: #{$value}px;
+      }
+    }
+  }
+}
+//margin
+@include generateBox($list:(ml margin-left) (mr margin-right) (mt margin-top) (mb margin-bottom));
+
+//padding
+@include generateBox($list:(pl padding-left) (pr padding-right) (pt padding-top) (pb padding-bottom));

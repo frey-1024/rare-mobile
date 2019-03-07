@@ -1,5 +1,6 @@
 import lazyLoad from '@/components/LazyLoad';
-import {pullToRefreshNormalDocRouters, pullToRefreshNormalDemoRouters} from '../pages/pullToRefreshNormal/router';
+import {pullToRefreshNormalDocRouters, pullToRefreshNormalDemoRouters} from '../pages/components/pullToRefreshNormal/router';
+import {inputNumberDocRouters, inputNumberDemoRouters} from '../pages/components/inputNumber/router';
 import {introduceDocRouters} from '../pages/introduce/router';
 import {homeDocRouters, homeDemoRouters} from '../pages/home/router';
 
@@ -8,12 +9,14 @@ const docRouters = [
   ...introduceDocRouters,
   ...homeDocRouters,
   ...pullToRefreshNormalDocRouters,
+  ...inputNumberDocRouters,
 ];
 
 // 文档所有路由
 const demoRouters = [
   ...homeDemoRouters,
   ...pullToRefreshNormalDemoRouters,
+  ...inputNumberDemoRouters,
 ];
 
 export function getDocRouters() {

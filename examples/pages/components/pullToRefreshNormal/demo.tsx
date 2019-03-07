@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { PullToRefreshNormal } from 'rate-mobile/index';
 import './styles/demo.scss';
 
-interface PullToRefreshNormalProps extends RouteProps{
+interface PullToRefreshNormalProps extends RouteProps {
 
 }
 
