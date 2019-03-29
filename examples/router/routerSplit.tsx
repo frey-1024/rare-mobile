@@ -1,6 +1,7 @@
 import lazyLoad from '@/components/LazyLoad';
 import {pullToRefreshNormalDocRouters, pullToRefreshNormalDemoRouters} from '../pages/components/pullToRefreshNormal/router';
 import {inputNumberDocRouters, inputNumberDemoRouters} from '../pages/components/inputNumber/router';
+import {shiftNavDocRouters, shiftNavDemoRouters} from '../pages/components/shiftNav/router';
 import {introduceDocRouters} from '../pages/introduce/router';
 import {homeDocRouters, homeDemoRouters} from '../pages/home/router';
 
@@ -10,6 +11,7 @@ const docRouters = [
   ...homeDocRouters,
   ...pullToRefreshNormalDocRouters,
   ...inputNumberDocRouters,
+  ...shiftNavDocRouters,
 ];
 
 // 文档所有路由
@@ -17,6 +19,7 @@ const demoRouters = [
   ...homeDemoRouters,
   ...pullToRefreshNormalDemoRouters,
   ...inputNumberDemoRouters,
+  ...shiftNavDemoRouters,
 ];
 
 export function getDocRouters() {

@@ -6,10 +6,7 @@ import '../styles/demoBase.scss';
 
 const demoRouters = getDemoRouters();
 
-interface DocProps extends RouteProps {
-}
-
-export default class Doc extends React.Component<DocProps, any> {
+export default class Doc extends React.Component<RouteProps, any> {
   getAvailableRouter() {
     const { match } = this.props;
     return demoRouters.map((route: any) =>
